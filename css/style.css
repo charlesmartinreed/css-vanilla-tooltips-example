@@ -26,20 +26,25 @@ body {
 .avatar::before,
 .avatar::after {
   --scale: 0;
+  --tooltip-color: #222;
+  --arrow-size: 20px;
+
   position: absolute;
   top: -0.25rem;
   left: 50%;
 
-  transform: translateX(-50%) translateY(-100%) scale(var(--scale));
+  transform: translateX(-50%) translateY(var(--translate-y, 0))
+    scale(var(--scale));
   transition: transform 0.1s ease-in-out;
   transform-origin: bottom center;
 }
 
 .avatar::before {
+  --translate-y: calc(-100% - var(--arrow-size));
   content: attr(data-tooltip);
-  background-color: #222;
+  background-color: var(--tooltip-color);
   color: white;
-  padding: 0.7rem;
+  padding: 0.8rem;
   /* will only be as need as possible, always encompass text */
   width: max-content;
   max-width: 100%;
@@ -48,6 +53,18 @@ body {
   letter-spacing: 0.07rem;
 }
 
-.avatar:hover.avatar::before {
+/* this is our CSS triangle/pointer */
+.avatar::after {
+  --translate-y: calc(-1 * var(--arrow-size));
+
+  content: "";
+  border: var(--arrow-size) solid transparent;
+  border-top-color: var(--tooltip-color);
+
+  transform-origin: top center;
+}
+
+.avatar:hover.avatar::before,
+.avatar:hover.avatar::after {
   --scale: 1;
 }
